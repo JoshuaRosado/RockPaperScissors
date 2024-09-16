@@ -103,6 +103,10 @@ struct ContentView: View {
                 showScore = true
                 userWon = true
                 
+            case ("Rock", 0):
+                selectionResult = drawResult
+                showScore = true
+                
             case ("Rock", 1):
                 selectionResult = loosingResult
                 showScore = true
@@ -118,6 +122,10 @@ struct ContentView: View {
                 selectionResult = loosingResult
                 showScore = true
                 
+            case ("Paper", 1):
+                selectionResult = drawResult
+                showScore = true
+                
             case ("Scissors", 1):
                 selectionResult = winningResult
                 score += 1
@@ -127,6 +135,11 @@ struct ContentView: View {
             case ("Scissors", 0):
                 selectionResult = loosingResult
                 showScore = true
+                
+            case ("Scissors", 2):
+                selectionResult = drawResult
+                showScore = true
+                
             default:
                 print("X")
                 
