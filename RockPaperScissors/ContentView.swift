@@ -26,9 +26,8 @@ struct ContentView: View {
     
     @State private var randomAnswer = Int.random(in: 0...2)
     
-    @State private var optionSelected = "Rock"
+    @State private var optionSelected = ""
     @State private var score = 0
-    @State private var userName = ""
     @State private var rounds = 1
     @State private var selectionResult = ""
     @State private var showScore = false
@@ -54,7 +53,7 @@ struct ContentView: View {
                 }
                 .padding(.top, 25)
                 Spacer()
-
+                
 
                     // ========== btns options
                     VStack{
@@ -75,9 +74,10 @@ struct ContentView: View {
                 Text("Score: \(score)").font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/).bold().foregroundStyle(.secondary)
                 
             }
-            .alert("\(selectionResult)", isPresented: $showScore){
+            .alert("\(listOfOptions[randomAnswer])", isPresented: $showScore){
                 Button("Next", action: gameLimit)
             } message:{
+                Text("\(selectionResult)")
                 Text("Score: \(score) / 10")
             }
             .alert("Game Over!", isPresented: $gameOver){
@@ -89,9 +89,11 @@ struct ContentView: View {
 
         }
     func matchResult(_ number: Int){
-            let winningResult = "You win!\(optionSelected) beats \(listOfOptions[randomAnswer])"
+            var optionSelected = listOfOptions[number]
+            let winningResult = "You win! \(optionSelected) beats \(listOfOptions[randomAnswer])"
             let loosingResult = "You loose! \(listOfOptions[randomAnswer]) beats \(optionSelected)"
             let drawResult = "\(listOfOptions[randomAnswer]) vs \(optionSelected) Is a draw "
+            optionSelected = listOfOptions[number]
             
             
             
