@@ -13,7 +13,10 @@ struct gametitlefont: View{
     
     var body: some View{
         Text(text)
-            .font(.largeTitle).fontWidth(.compressed).fontWeight(.heavy).foregroundStyle(.secondary)
+            .padding(.top, 30)
+            .font(.system(size: 30.0, weight: .regular, design: .rounded))
+            .fontWidth(.compressed).fontWeight(.heavy).foregroundStyle(.secondary).shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
+        
         
     }
 }
@@ -32,7 +35,12 @@ struct ContentView: View {
     @State private var selectionResult = ""
     @State private var showScore = false
     @State private var gameOver = false
+    
+    
     @State private var userWon = false
+    @State private var userLoss = false
+    @State private var draw = false
+
      
 
     
@@ -42,7 +50,7 @@ struct ContentView: View {
         ZStack{
             // ==========  bg section
             Section{
-                RadialGradient(colors: [.teal.opacity(0.2), .yellow.opacity(0.20)], center: .bottom, startRadius: 200 , endRadius: 800)
+                RadialGradient(colors: [.secondary.opacity(0.2), .green.opacity(0.9)], center: .center, startRadius: 200 , endRadius: 800)
                     .ignoresSafeArea()
             }
             // ========== content stack
@@ -52,7 +60,9 @@ struct ContentView: View {
                     gametitlefont(text: "RockPaperScissors")
                 }
                 .padding(.top, 25)
+                .padding(.bottom, 20)
                 Spacer()
+                
                 
 
                     // ========== btns options
@@ -63,15 +73,20 @@ struct ContentView: View {
                             } label: {
                                 Text("\(listOfOptions[number])")
                             }
+                            
                         }
-                        .buttonStyle(.bordered).padding(5).font(.largeTitle).foregroundColor(.white).bold().shadow(radius: 1)
+                        .padding(20).font(.system(size: 35, weight: .black, design:  .rounded)).shadow(radius: 2).buttonStyle(.bordered)
+                        .foregroundStyle(.white)
+                        .tint(.green.opacity(0.8))
+                        
                     }
                     
-            
+                Spacer()
                 Spacer()
                 
                 // ========== score display
-                Text("Score: \(score)").font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/).bold().foregroundStyle(.secondary)
+                Text("Score: \(score)").font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/).bold()
+                    .foregroundStyle(userWon ? .blue.opacity(0.8): .secondary)
                 
             }
             .alert("\(listOfOptions[randomAnswer])", isPresented: $showScore){
@@ -108,10 +123,12 @@ struct ContentView: View {
             case ("Rock", 0):
                 selectionResult = drawResult
                 showScore = true
+                draw = true
                 
             case ("Rock", 1):
                 selectionResult = loosingResult
                 showScore = true
+                userLoss = true
                 
             case ("Paper", 0):
                 selectionResult = winningResult
@@ -123,10 +140,12 @@ struct ContentView: View {
             case ("Paper", 2):
                 selectionResult = loosingResult
                 showScore = true
+                userLoss = true
                 
             case ("Paper", 1):
                 selectionResult = drawResult
                 showScore = true
+                draw = true
                 
             case ("Scissors", 1):
                 selectionResult = winningResult
@@ -137,10 +156,12 @@ struct ContentView: View {
             case ("Scissors", 0):
                 selectionResult = loosingResult
                 showScore = true
+                userLoss = true
                 
             case ("Scissors", 2):
                 selectionResult = drawResult
                 showScore = true
+                draw = true
                 
             default:
                 print("X")
@@ -153,12 +174,16 @@ struct ContentView: View {
         }
     func gameLimit(){
         if rounds < 10 {
+            userWon = false
+            userLoss = false
+            draw = false
             nextRound()
         }else if rounds == 10{
             gameOver = true
             
         }
     }
+    
     func resetGame(){
         rounds = 0
         score = 0
